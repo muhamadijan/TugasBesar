@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +20,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'store_id',  // Relasi ke cabang toko
+        'role',
+        'role_id',   // Relasi ke peran pengguna
     ];
 
     /**
@@ -42,4 +44,34 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Relasi ke model Store.
+     */
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
+
+    public function roles()
+{
+    return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+}
+
+
+    /**
+     * Relasi ke model Role.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Relasi ke model Transaction.
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
