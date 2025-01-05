@@ -3,7 +3,9 @@
 @section('content')
 <div class="container">
     <h2>Daftar Transaksi</h2>
+    @if(auth()->user()->role === 'cashier')
     <a href="{{ route('transactions.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
+@endif
     <table class="table table-striped">
         <thead>
             <tr>
@@ -27,6 +29,9 @@
                 <td>{{ $transaction->transaction_date }}</td>
                 <td>
                     <a href="{{ route('transactions.edit', $transaction) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{{ route('transactions.show', $transaction->id) }}" class="btn btn-info">Detail</a>
+
+
                     <form action="{{ route('transactions.destroy', $transaction) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')

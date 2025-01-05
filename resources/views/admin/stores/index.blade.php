@@ -3,7 +3,9 @@
 @section('content')
 <div class="container">
     <h1>Daftar Stores</h1>
+    @if(auth()->user()->role === 'owner')
     <a href="{{ route('stores.create') }}" class="btn btn-primary mb-3">Tambah Store</a>
+@endif
     <table class="table table-bordered">
         <thead>
             <tr>

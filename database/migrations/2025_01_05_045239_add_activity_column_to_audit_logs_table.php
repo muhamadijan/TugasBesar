@@ -11,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->unsignedBigInteger('store_id')->nullable()->change();
+        Schema::table('audit_logs', function (Blueprint $table) {
+            $table->text('activity')->after('user_id'); // Menambahkan kolom activity
         });
     }
 
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            //
+        Schema::table('audit_logs', function (Blueprint $table) {
+            $table->dropColumn('activity');
         });
     }
+
 };

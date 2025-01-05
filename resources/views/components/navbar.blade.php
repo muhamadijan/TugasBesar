@@ -7,7 +7,20 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('users.index') }}">Kelola Akun</a>
+                    <a class="nav-link" href="{{ route('users.index') }}">  Akun Pengguna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('stores.index') }}">stores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('transactions.index') }}">transactions</a>
+                </li>
+        
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('products.index') }}">products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('audit_logs.index') }}">audit logs</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">

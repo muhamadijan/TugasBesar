@@ -7,8 +7,9 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\TransactionController;
-
-
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionDetailController;
+use App\Http\Controllers\AuditLogController;
 /*
 |----------------------------------------------------------------------
 | Web Routes
@@ -57,6 +58,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', RegisterController::class)->except(['show']);
     });
 
+
+    Route::middleware(['auth', 'role:owner,manager,supervisor'])->group(function () {
+        Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit_logs.index');
+    });
+
+
     Route::get('/', function () {
         return view('pages.home');
     });
@@ -68,7 +75,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::resource('transactions', TransactionController::class);
     });
-    
+
+
+    Route::resource('products', ProductController::class);
+
+    Route::resource('transaction_details', TransactionDetailController::class);
+
 
     // Route untuk halaman profil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

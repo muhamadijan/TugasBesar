@@ -3,7 +3,11 @@
 @section('content')
 <div class="container">
     <h1>Daftar Akun</h1>
+
+    @if(auth()->user()->role === 'owner')
     <a href="{{ route('users.create') }}" class="btn btn-primary">Tambah Akun</a>
+@endif
+
     <table class="table mt-3">
         <thead>
             <tr>

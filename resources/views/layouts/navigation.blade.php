@@ -15,8 +15,32 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users')">
+                        Akun Pengguna
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('stores.index')" :active="request()->routeIs('stores')">
+                        stores
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions')">
+                        transactions
+                    </x-nav-link>
+
+    
+
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products')">
+                        products
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('audit_logs.index')" :active="request()->routeIs('audit_logs')">
+                        audit logs
+                    </x-nav-link>
+
                 </div>
             </div>
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
