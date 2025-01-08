@@ -12,7 +12,7 @@ class RegisterController extends Controller
     // Menampilkan daftar pengguna
     public function index()
     {
-        $users = User::whereNotIn('role', ['owner', 'supervisor'])->get();
+        $users = User::whereNotIn('role', ['owner','manager'])->get();
         return view('users.index', compact('users'));
 
     }

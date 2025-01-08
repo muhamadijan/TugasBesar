@@ -9,7 +9,7 @@
         <div class="alert alert-primary" role="alert">
  Selamat datang  {{ auth()->user()->name }}  silahkan ubah default password anda,<a href="/akun/mahasiswa" class="alert-link"> Ubah Password ?</a>
 </div><br>
-<h5> <i class="fa fa-edit fa-fw fa-1x" aria-hidden="true"></i> Prosedur Aplikasi TransTrack </h5><hr>
+<h5> <i class="fa fa-edit fa-fw fa-1x" aria-hidden="true"></i> Prosedur Aplikasi Jayusman </h5><hr>
 <!-- <table class="table">
   <thead>
     <tr>
@@ -29,7 +29,7 @@
   </tbody>
 </table> -->
 <center>
-<img src="{{asset('/asset/img/logo.png')}}" alt="" width="450">
+<img src="{{asset('/asset/img/logo.jpg')}}" alt="" width="450">
 
 </center>
 

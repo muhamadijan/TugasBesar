@@ -50,8 +50,8 @@
                                         <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">
-                                                <i class="fas fa-trash"></i> 
+                                            <button class="btn =btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">
+                                                <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                         @endcan

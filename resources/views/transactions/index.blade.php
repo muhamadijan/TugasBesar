@@ -38,7 +38,7 @@
                                     <td>{{ number_format($transaction->total_amount, 2) }}</td>
                                     <td>{{ $transaction->transaction_date }}</td>
                                     <td>
-                                        @if(auth()->user()->role === 'cashier')
+                                        @if(auth()->user()->role === 'cashier' || auth()->user()->role === 'supervisor'|| auth()->user()->role === 'manager')
                                             <a href="{{ route('transactions.show', $transaction->id) }}" class="btn btn-info btn-sm">
                                                 <i class="fas fa-eye"></i>
                                             </a>
@@ -50,7 +50,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">
-                                                    <i class="fas fa-trash-alt"></i> 
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                         @endif

@@ -92,7 +92,7 @@
 
 
 
-                        @if(in_array(auth()->user()->role, ['owner', 'supervisor']))
+                        @if(in_array(auth()->user()->role, ['owner', 'manager']))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('users.index') }}">
                                 <i class="fas fa-users text-info"></i>
