@@ -1,17 +1,38 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
+@section('content')
+<div class="main-content">
+    <section class="section">
+        <div class="section-header bg-">
+            <h1>Dashboard</h1>
         </div>
-    </div>
-</x-app-layout>
+        <div class="alert alert-primary" role="alert">
+ Selamat datang  {{ auth()->user()->name }}
+</div><br>
+<h5> <i class="fa fa-edit fa-fw fa-1x" aria-hidden="true"></i> Prosedur Aplikasi TransTrack </h5><hr>
+<!-- <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Nama</th>
+      <th scope="col">Email</th>
+      <th scope="col">Password</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ auth()->user()->name }}</td>
+      <td>{{ auth()->user()->email }}</td>
+        <td>{{ str_repeat('*', strlen(auth()->user()->password)) }}
+</td>
+    </tr>
+
+  </tbody>
+</table> -->
+<center>
+<img src="{{asset('/asset/img/logo.png')}}" alt="" width="450">
+
+</center>
+
+
+</div>
+@endsection

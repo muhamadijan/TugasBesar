@@ -1,78 +1,95 @@
-@extends('layouts.akun')
+@extends('layouts.admin')
 
 @section('content')
-<div class="container">
-    <h2>Edit Transaksi #{{ $transaction->transaction_code }}</h2>
-
-    <form action="{{ route('transactions.update', $transaction->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        <div class="mb-3">
-            <label for="store_id" class="form-label">Toko</label>
-            <select name="store_id" id="store_id" class="form-control" required>
-                @foreach ($stores as $store)
-                    <option value="{{ $store->id }}" {{ $store->id == $transaction->store_id ? 'selected' : '' }}>
-                        {{ $store->name }}
-                    </option>
-                @endforeach
-            </select>
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Edit Transaksi #{{ $transaction->transaction_code }}</h1>
         </div>
+        <div class="section-body">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-edit"></i> Form Edit Transaksi</h4>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('transactions.update', $transaction->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
 
-        <div class="mb-3">
-            <label for="user_id" class="form-label">Kasir</label>
-            <select name="user_id" id="user_id" class="form-control" required>
-                @foreach ($users as $user)
-                    <option value="{{ $user->id }}" {{ $user->id == $transaction->user_id ? 'selected' : '' }}>
-                        {{ $user->name }}
-                    </option>
-                @endforeach
-            </select>
+                        <!-- Toko -->
+                        <div class="mb-3">
+                            <label for="store_id" class="form-label">Toko</label>
+                            <select name="store_id" id="store_id" class="form-control" required>
+                                @foreach ($stores as $store)
+                                    <option value="{{ $store->id }}" {{ $store->id == $transaction->store_id ? 'selected' : '' }}>
+                                        {{ $store->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Kasir -->
+                        <div class="mb-3">
+                            <label for="user_id" class="form-label">Kasir</label>
+                            <select name="user_id" id="user_id" class="form-control" required>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" {{ $user->id == $transaction->user_id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Produk -->
+                        <div id="products-container" class="mb-3">
+                            <label for="products" class="form-label">Produk</label>
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Produk</th>
+                                        <th>Harga</th>
+                                        <th>Kuantitas</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="product-rows">
+                                    @foreach ($transaction->products as $product)
+                                    <tr>
+                                        <td>{{ $product->name }}</td>
+                                        <td>
+                                            <input type="hidden" class="product-price" value="{{ $product->price }}">
+                                            Rp {{ number_format($product->price, 2, ',', '.') }}
+                                        </td>
+                                        <td>
+                                            <input type="number" class="product-quantity form-control" name="quantity[{{ $product->id }}]" min="0" value="{{ $product->pivot->quantity }}" data-product-id="{{ $product->id }}">
+                                        </td>
+                                        <td class="product-subtotal">
+                                            Rp {{ number_format($product->pivot->quantity * $product->price, 2, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="mb-3">
+                            <label for="total_amount" class="form-label">Total</label>
+                            <input type="number" name="total_amount" id="total_amount" class="form-control" value="{{ $transaction->total_amount }}" readonly>
+                        </div>
+
+                        <!-- Tanggal -->
+                        <div class="mb-3">
+                            <label for="transaction_date" class="form-label">Tanggal</label>
+                            <input type="date" name="transaction_date" id="transaction_date" class="form-control" value="{{ \Carbon\Carbon::parse($transaction->transaction_date)->format('Y-m-d') }}" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Perbarui Transaksi</button>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div id="products-container" class="mb-3">
-            <label for="products" class="form-label">Produk</label>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Produk</th>
-                        <th>Harga</th>
-                        <th>Kuantitas</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody id="product-rows">
-                    @foreach ($transaction->products as $product)
-                    <tr>
-                        <td>{{ $product->name }}</td>
-                        <td>
-                            <input type="hidden" class="product-price" value="{{ $product->price }}">
-                            {{ number_format($product->price, 2) }}
-                        </td>
-                        <td>
-                            <input type="number" class="product-quantity form-control" name="quantity[{{ $product->id }}]" min="0" value="{{ $product->pivot->quantity }}" data-product-id="{{ $product->id }}">
-                        </td>
-                        <td class="product-subtotal">
-                            Rp {{ number_format($product->pivot->quantity * $product->price, 2, ',', '.') }}
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mb-3">
-            <label for="total_amount" class="form-label">Total</label>
-            <input type="number" name="total_amount" id="total_amount" class="form-control" value="{{ $transaction->total_amount }}" readonly>
-        </div>
-
-        <div class="mb-3">
-            <label for="transaction_date" class="form-label">Tanggal</label>
-            <input type="date" name="transaction_date" id="transaction_date" class="form-control" value="{{ \Carbon\Carbon::parse($transaction->transaction_date)->format('Y-m-d') }}" required>
-        </div>
-
-        <button type="submit" class="btn btn-success">Perbarui Transaksi</button>
-    </form>
+    </section>
 </div>
 
 <script>
@@ -105,4 +122,5 @@
         calculateTotal();
     });
 </script>
+
 @endsection

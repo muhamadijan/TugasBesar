@@ -6,23 +6,42 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('users.index') }}">  Akun Pengguna</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('stores.index') }}">stores</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('transactions.index') }}">transactions</a>
-                </li>
-        
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('products.index') }}">products</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('audit_logs.index') }}">audit logs</a>
-                </li>
+                <!-- Akun Pengguna: Hanya untuk Owner -->
+                @if(auth()->user()->role === 'owner')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('users.index') }}">Akun Pengguna</a>
+                    </li>
+                @endif
+
+                <!-- Stores: Untuk Owner dan Manager -->
+                @if(auth()->user()->role === 'owner')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('stores.index') }}">Stores</a>
+                    </li>
+                @endif
+
+                <!-- Transactions: Untuk Owner, Manager, dan Kasir -->
+                @if(in_array(auth()->user()->role, ['owner', 'manager', 'cashier']))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('transactions.index') }}">Transactions</a>
+                    </li>
+                @endif
+
+                <!-- Products: Untuk Owner dan Manager -->
+                @if(in_array(auth()->user()->role, ['owner', 'manager', 'warehouse_staff']))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('products.index') }}">Products</a>
+                    </li>
+                @endif
+
+                <!-- Audit Logs: Hanya untuk Owner -->
+                @if(auth()->user()->role === 'owner')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('audit_logs.index') }}">Audit Logs</a>
+                    </li>
+                @endif
             </ul>
+
             <ul class="navbar-nav ms-auto">
                 @auth
                     <li class="nav-item">

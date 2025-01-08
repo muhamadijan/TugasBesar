@@ -10,36 +10,48 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+              <!-- Navigation Links -->
+<div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+    <!-- Dashboard: Tampil untuk semua peran -->
+    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+        {{ __('Dashboard') }}
+    </x-nav-link>
 
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users')">
-                        Akun Pengguna
-                    </x-nav-link>
+    <!-- Akun Pengguna: Hanya tampil untuk Owner -->
+    @if(auth()->user()->role === 'owner')
+        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+            Akun Pengguna
+        </x-nav-link>
+    @endif
 
-                    <x-nav-link :href="route('stores.index')" :active="request()->routeIs('stores')">
-                        stores
-                    </x-nav-link>
+    <!-- Stores: Hanya tampil untuk Owner dan Manager -->
+    @if(auth()->user()->role === 'owner' || auth()->user()->role === 'manager')
+        <x-nav-link :href="route('stores.index')" :active="request()->routeIs('stores.index')">
+            Stores
+        </x-nav-link>
+    @endif
 
-                    <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions')">
-                        transactions
-                    </x-nav-link>
+    <!-- Transactions: Tampil untuk Owner, Manager, dan Kasir -->
+    @if(in_array(auth()->user()->role, ['owner', 'manager', 'cashier']))
+        <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.index')">
+            Transactions
+        </x-nav-link>
+    @endif
 
-    
+    <!-- Products: Tampil untuk Owner dan Manager -->
+    @if(auth()->user()->role === 'owner' || auth()->user()->role === 'manager')
+        <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+            Products
+        </x-nav-link>
+    @endif
 
-                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products')">
-                        products
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('audit_logs.index')" :active="request()->routeIs('audit_logs')">
-                        audit logs
-                    </x-nav-link>
-
-                </div>
-            </div>
+    <!-- Audit Logs: Hanya tampil untuk Owner -->
+    @if(auth()->user()->role === 'owner')
+        <x-nav-link :href="route('audit_logs.index')" :active="request()->routeIs('audit_logs.index')">
+            Audit Logs
+        </x-nav-link>
+    @endif
+</div>
 
 
             <!-- Settings Dropdown -->

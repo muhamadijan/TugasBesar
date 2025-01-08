@@ -1,52 +1,115 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="email" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Role Selection -->
-        <div class="mt-4">
-            <x-input-label for="role" :value="__('Role')" />
-            <select id="role" name="role" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Jayusman</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins';
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('/asset/img/logo.jpg') no-repeat center center / cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 24px;
+            padding: 15px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+        }
+        .login-form h1 {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .login-form p {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .login-form input[type="text"],
+        .login-form input[type="password"],
+        .login-form select {
+            width: 100%;
+            border: none;
+            border-radius: 24px;
+            font-size: 12px;
+            background-color: gainsboro;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .login-form input:focus,
+        .login-form select:focus {
+            border: 2px solid #21D4FD;
+            outline: none;
+        }
+        .login-form button {
+            background-image: linear-gradient(19deg, #21D4FD 0%, #0099ff 100%);
+            width: 100%;
+            color: white;
+            border: none;
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: opacity 0.25s;
+        }
+        .login-form button:hover {
+            opacity: 0.8;
+        }
+        .invalid-feedback {
+            display: block;
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        @media (max-width: 600px) {
+            .login-form {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-form">
+        <form action="{{ route('login') }}" method="POST">
+            <center>
+                <img src="{{ asset('/asset/img/logo.jpg') }}" alt="Logo" class="img img-thumbnail border-0" width="200">
+            </center>
+            <h1>Aplikasi Jayusman</h1>
+            @csrf
+            <input type="text" name="email" placeholder="Email">
+            @error('email')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+            <input type="password" name="password" placeholder="Password" required>
+            @error('password')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+            <select name="level" class="form-control @error('level') is-invalid @enderror" required>
+                <option value="">Select Role</option>
                 <option value="owner" {{ old('role') == 'owner' ? 'selected' : '' }}>Owner</option>
                 <option value="manager" {{ old('role') == 'manager' ? 'selected' : '' }}>Manager</option>
                 <option value="supervisor" {{ old('role') == 'supervisor' ? 'selected' : '' }}>Supervisor</option>
                 <option value="cashier" {{ old('role') == 'cashier' ? 'selected' : '' }}>Cashier</option>
                 <option value="warehouse_staff" {{ old('role') == 'warehouse_staff' ? 'selected' : '' }}>Warehouse Staff</option>
             </select>
-            <x-input-error :messages="$errors->get('role')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-4">
-                {{ __('Login') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            @error('level')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

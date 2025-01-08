@@ -14,10 +14,16 @@ class AuditLogController extends Controller
      */
     public function index()
     {
+        // Periksa apakah pengguna memiliki peran 'owner' atau 'supervisor'
+        if (!in_array(auth()->user()->role, ['owner', 'supervisor'])) {
+            abort(403, 'Anda tidak memiliki izin untuk mengakses halaman ini.');
+        }
+
         $auditLogs = AuditLog::with('user')->latest()->paginate(10);
 
         return view('audit_logs.index', compact('auditLogs'));
     }
+
 
     /**
      * Menyimpan log aktivitas.

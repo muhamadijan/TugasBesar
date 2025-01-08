@@ -12,8 +12,9 @@ class RegisterController extends Controller
     // Menampilkan daftar pengguna
     public function index()
     {
-        $users = User::where('role', '!=', 'owner')->get();
+        $users = User::whereNotIn('role', ['owner', 'supervisor'])->get();
         return view('users.index', compact('users'));
+
     }
 
     // Form untuk membuat akun baru

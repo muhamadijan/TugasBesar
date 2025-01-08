@@ -127,24 +127,33 @@ class TransactionController extends Controller
 
     public function edit(Transaction $transaction)
     {
-        // Ambil semua data yang diperlukan
+        $user = auth()->user();
+
+        // Pastikan hanya transaksi di toko kasir yang bisa diedit
+        if ($user->role === 'cashier' && $transaction->store_id !== $user->store_id) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit transaksi ini.');
+        }
+
         $stores = Store::all();
         $users = User::where('role', 'cashier')->get();
         $products = Product::all();
 
-        // Kirim data transaksi beserta produk yang terhubung
         return view('transactions.edit', compact('transaction', 'stores', 'users', 'products'));
     }
 
+
+
     public function update(Request $request, Transaction $transaction)
     {
-        // Validasi input
         $request->validate([
             'store_id' => 'required|exists:stores,id',
             'user_id' => 'required|exists:users,id',
             'transaction_code' => 'required|string|unique:transactions,transaction_code,' . $transaction->id,
             'total_amount' => 'required|numeric|min:0',
             'transaction_date' => 'required|date',
+            'products' => 'required|array', // Pastikan produk dikirim
+            'products.*' => 'exists:products,id', // Setiap produk harus valid
+            'quantity.*' => 'required|integer|min:1', // Kuantitas validasi
         ]);
 
         // Update data transaksi
@@ -156,27 +165,26 @@ class TransactionController extends Controller
             'transaction_date',
         ]));
 
-        // Update produk yang terhubung dengan transaksi (many-to-many)
-        $productQuantities = $request->input('quantity'); // Ambil kuantitas produk dari form
-        $products = $transaction->products; // Ambil produk yang terhubung dengan transaksi
-
-        foreach ($products as $product) {
-            // Update kuantitas untuk setiap produk
-            if (isset($productQuantities[$product->id])) {
-                $quantity = $productQuantities[$product->id];
-                // Update pivot table untuk transaksi produk
-                $transaction->products()->updateExistingPivot($product->id, ['quantity' => $quantity]);
-            }
+        // Perbarui produk terkait
+        $productsData = [];
+        foreach ($request->products as $productId) {
+            $productsData[$productId] = ['quantity' => $request->quantity[$productId]];
         }
+        $transaction->products()->sync($productsData); // Sinkronkan produk baru
 
         return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil diperbarui!');
     }
 
-    // Menghapus transaksi
-    public function destroy(Transaction $transaction)
-    {
-        $transaction->delete();
 
-        return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dihapus!');
-    }
+    public function destroy(Transaction $transaction)
+{
+    // Hapus relasi di tabel pivot
+    $transaction->products()->detach();
+
+    // Hapus transaksi
+    $transaction->delete();
+
+    return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil dihapus!');
+}
+
 }
